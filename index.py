@@ -1,11 +1,10 @@
 from PyQt5.QtWidgets import QApplication
-from window import Window
-from keylistener import start_listening
+from windows import Window
+from keylistener import KeyListener
 
 import sys
 
 def create_window():
-    keyboard_listener = start_listening()
     window = Window()
     return window
 

@@ -1,10 +1,18 @@
 from pynput import keyboard
+from PyQt5 import QtCore
 
-def on_activated():
-    print("Shortcut pressed")
+class KeyListener(QtCore.QObject):
 
-def start_listening():
-    with keyboard.GlobalHotKeys({
-        "<ctrl>+<alt>+h": on_activated
-    }) as h:
-    h.start()
+    signal = QtCore.pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+
+    def on_press(self):
+        self.signal.emit()
+
+    def run(self):
+        self.listener = keyboard.GlobalHotKeys({
+            '<ctrl>+<alt>+h': self.on_press
+        })
+        self.listener.start()
