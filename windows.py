@@ -20,11 +20,9 @@ class Window(QMainWindow):
         self.keyListener.signal.connect(self.on_hotkey_create_canvas)
 
     def on_hotkey_create_canvas(self):
-        print("ay")
         self.dialog = CanvasWindow(self)
         self.dialogs.append(self.dialog)
         self.dialog.showFullScreen()
-        print("ey")
     
     def init_window(self):
         self.dialogs = list()
