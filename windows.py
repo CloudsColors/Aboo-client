@@ -20,9 +20,11 @@ class Window(QMainWindow):
         self.keyListener.signal.connect(self.on_hotkey_create_canvas)
 
     def on_hotkey_create_canvas(self):
+        print("ay")
         self.dialog = CanvasWindow(self)
         self.dialogs.append(self.dialog)
-        self.dialog.show()
+        self.dialog.showFullScreen()
+        print("ey")
     
     def init_window(self):
         self.dialogs = list()
@@ -36,9 +38,12 @@ class CanvasWindow(QMainWindow):
         super(CanvasWindow, self).__init__()
         self.top = 0
         self.left = 0
-        self. width = 1920
+        self.width = 1920
         self.height = 1080
         self.init_window()
     
     def init_window(self):
         self.setGeometry(self.top, self.left, self.width, self.height)
+        self.setWindowOpacity(0.7)
+        #Remove titlebar
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)

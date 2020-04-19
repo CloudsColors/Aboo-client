@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import QApplication
 from windows import Window
-from keylistener import KeyListener
 
 import sys
 
@@ -11,4 +10,4 @@ def create_window():
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = create_window()
-    app.exec_()
+    sys.exit(app.exec_())
