@@ -29,3 +29,6 @@ class Window(QMainWindow):
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.height)
         self.show()
+
+    #todo: import webbrowser
+    #todo: webbrowser.open(url)
