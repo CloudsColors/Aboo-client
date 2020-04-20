@@ -4,7 +4,7 @@ from PyQt5 import QtCore, Qt
 
 class CanvasWindow(QMainWindow):
 
-    _RIGHT_CLICK = 0
+    _RIGHT_CLICK = 2
     _LEFT_CLICK = 1
 
     def __init__(self, parent=None):
