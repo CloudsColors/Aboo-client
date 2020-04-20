@@ -4,6 +4,9 @@ from PyQt5 import QtCore, Qt
 
 class CanvasWindow(QMainWindow):
 
+    _RIGHT_CLICK = 0
+    _LEFT_CLICK = 1
+
     def __init__(self, parent=None):
         super(CanvasWindow, self).__init__()
         self.mP = None #Mouse position when pressed
@@ -20,7 +23,10 @@ class CanvasWindow(QMainWindow):
         self.update()
 
     def mousePressEvent(self, e):
-        self.mP = e.pos()
+        if(e.button() == self._LEFT_CLICK):
+            self.mP = e.pos()
+        if(e.button() == self._RIGHT_CLICK):
+            self.close_window()
 
     def mouseReleaseEvent(self, e):
         self.mR = e.pos()
@@ -30,16 +36,14 @@ class CanvasWindow(QMainWindow):
         self.setWindowOpacity(0.0)
         if(self.mP.x() < self.mR.x()):
             upperLeft = self.mP.x()
-            width = self.mR.x() - self.mP.x()
         else:
             upperLeft = self.mR.x()
-            width = self.mP.x() - self.mR.x()
         if(self.mP.y() < self.mR.y()):
             upperY = self.mP.y()
-            height = self.mR.y() - self.mP.y()
         else:
             upperY = self.mR.y()
-            height = self.mP.y() - self.mR.y()
+        height = abs(self.mP.y() - self.mR.y())
+        width = abs(self.mR.x() - self.mP.x())
         screen = QApplication.primaryScreen().grabWindow(0, upperLeft, upperY, width, height)
         screen.save("blabla.jpeg")
         self.close_window()
@@ -49,9 +53,8 @@ class CanvasWindow(QMainWindow):
 
     def init_window(self):
         self.setWindowOpacity(0.1)
-        #Remove titlebar
+        #Remove titlebar and make window stay on top
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
-
 
     def paintEvent(self, event):
         if(self.mN == None or self.mP == None):
