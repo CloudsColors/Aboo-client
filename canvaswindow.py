@@ -45,7 +45,7 @@ class CanvasWindow(QMainWindow):
         height = abs(self.mP.y() - self.mR.y())
         width = abs(self.mR.x() - self.mP.x())
         screen = QApplication.primaryScreen().grabWindow(0, upperLeft, upperY, width, height)
-        screen.save("blabla.jpeg")
+        screen.save("temp_file_name.png")
         self.close_window()
 
     def close_window(self):
