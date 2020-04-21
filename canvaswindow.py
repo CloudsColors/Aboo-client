@@ -31,7 +31,7 @@ class CanvasWindow(QMainWindow):
         if(e.button() == self._LEFT_CLICK):
             self.mP = e.pos()
         if(e.button() == self._RIGHT_CLICK):
-            self.close_window()
+            self._SIGNAL.emit()
 
     def mouseReleaseEvent(self, e):
         self.mR = e.pos()
