@@ -13,6 +13,6 @@ class KeyListener(QtCore.QObject):
 
     def run(self):
         self.listener = keyboard.GlobalHotKeys({
-            '<ctrl>+<alt>+h': self.on_press
+            '<ctrl>+<alt>+s': self.on_press
         })
         self.listener.start()

@@ -5,13 +5,16 @@ from canvaswindow import CanvasWindow
 
 class Window(QMainWindow):
 
+    _TEST = "HEJ"
+
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
         self.title = "Aboo-client"
         self.top = 100
         self.left = 100
-        self. width = 800
+        self.width = 800
         self.height = 800
+        self.uploadBubbles = list()
         self.init_window()
         self.init_key_listener()
 
@@ -57,18 +60,18 @@ class Window(QMainWindow):
         self.setWindowIcon(QIcon("statics/icon-medium.png"))
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.height)
-        self.setMaximumSize(self.width, self.height)
-        #Show the window
+        self.setFixedSize(self.width, self.height)
+        #Testing, remove later.
         self.create_new_upload_bubble()
+        #Show the window
         self.show()
 
     def create_new_upload_bubble(self):
-        self.uploadText = QLabel(self)
-        self.uploadText.setText("<h3> New entry </h3> \n <a href='https://www.aboo.se/'> Link </a> \n TTL: 2020-04-22 21:11")
-        self.uploadText.setGeometry(5, 220, 390, 100)
-        self.uploadText.setStyleSheet("background-color: #81B1D5; border: 1px solid black; border-radius: 5px")
-
-
+        uploadText = QLabel(self)
+        uploadText.setText(f"<h4> Completed upload: </h4><p>https://www.aboo.se/</p>")
+        uploadText.setGeometry(15, 215 + (len(self.uploadBubbles * 75)), 390, 60)
+        uploadText.setStyleSheet("background-color: #81B1D5; border: 1px solid black; border-radius: 5px")
+        self.uploadBubbles.append(uploadText)
 
     #todo: import webbrowser
     #todo: webbrowser.open(url)
