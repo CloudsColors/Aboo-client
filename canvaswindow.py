@@ -6,9 +6,14 @@ class CanvasWindow(QMainWindow):
 
     _RIGHT_CLICK = 2
     _LEFT_CLICK = 1
+    _SIGNAL = QtCore.pyqtSignal()
 
-    def __init__(self, parent=None):
+    def __init__(self, xOffset, yOffset, parent=None):
         super(CanvasWindow, self).__init__()
+        #Screen offset is used to calculate where the screenshot is taken when not on primary
+        self.xOffset = xOffset
+        self.yOffset = yOffset
+        #Mouse coordinates is needed for when dragging out the rect where you want to screenshot
         self.mP = None #Mouse position when pressed
         self.mN = None #Mouse position right now (to create the box drawing)
         self.mR = None #Mouse position when released
@@ -44,9 +49,9 @@ class CanvasWindow(QMainWindow):
             upperY = self.mR.y()
         height = abs(self.mP.y() - self.mR.y())
         width = abs(self.mR.x() - self.mP.x())
-        screen = QApplication.primaryScreen().grabWindow(0, upperLeft, upperY, width, height)
+        screen = QApplication.primaryScreen().grabWindow(0, upperLeft+self.xOffset, upperY+self.yOffset, width, height)
         screen.save("temp_file_name.png")
-        self.close_window()
+        self._SIGNAL.emit()
 
     def close_window(self):
         self.close()

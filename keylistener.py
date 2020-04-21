@@ -3,13 +3,13 @@ from PyQt5 import QtCore
 
 class KeyListener(QtCore.QObject):
 
-    signal = QtCore.pyqtSignal()
+    _SIGNAL = QtCore.pyqtSignal()
 
     def __init__(self):
         super().__init__()
 
     def on_press(self):
-        self.signal.emit()
+        self._SIGNAL.emit()
 
     def run(self):
         self.listener = keyboard.GlobalHotKeys({
