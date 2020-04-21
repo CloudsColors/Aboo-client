@@ -60,6 +60,7 @@ class CanvasWindow(QMainWindow):
         if(self.mN == None or self.mP == None):
             return
         self.painter = QPainter(self)
-        self.painter.setPen(QPen(QtCore.Qt.black, 1, QtCore.Qt.SolidLine))
+        self.painter.setPen(QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine))
+        self.painter.setOpacity(0.99)
         self.painter.drawRect(self.mP.x(), self.mP.y(), self.mN.x()-self.mP.x(), self.mN.y()-self.mP.y())
         self.painter.end()
