@@ -35,7 +35,7 @@ class Window(QMainWindow):
 
     def on_hotkey_create_canvas(self):
         #Testing, remove later.
-        self.create_new_upload_bubble("https://www.aboo.se/")
+        self.display_new_upload_bubble("https://www.aboo.se/")
         #Clear any windows that already are open (to prevent several layers of windows)
         self.on_close_canvases()
         #Read in nr of monitors the user has
@@ -67,7 +67,7 @@ class Window(QMainWindow):
         #Show the window
         self.show()
 
-    def create_new_upload_bubble(self, url):
+    def display_new_upload_bubble(self, url):
         if(len(self.uploadBubbles) == 4):
             self.uploadBubbles.pop(0)
             for i in range(0, len(self.uploadBubbles)):
