@@ -6,7 +6,8 @@ class CanvasWindow(QMainWindow):
 
     _RIGHT_CLICK = 2
     _LEFT_CLICK = 1
-    _SIGNAL = QtCore.pyqtSignal()
+    _SIGNAL_CANCEL = QtCore.pyqtSignal()
+    _SIGNAL_SUCCESS = QtCore.pyqtSignal()
 
     def __init__(self, xOffset, yOffset, parent=None):
         super(CanvasWindow, self).__init__()
@@ -31,7 +32,7 @@ class CanvasWindow(QMainWindow):
         if(e.button() == self._LEFT_CLICK):
             self.mP = e.pos()
         if(e.button() == self._RIGHT_CLICK):
-            self._SIGNAL.emit()
+            self._SIGNAL_CANCEL.emit()
 
     def mouseReleaseEvent(self, e):
         self.mR = e.pos()
@@ -51,7 +52,8 @@ class CanvasWindow(QMainWindow):
         width = abs(self.mR.x() - self.mP.x())
         screen = QApplication.primaryScreen().grabWindow(0, upperLeft+self.xOffset, upperY+self.yOffset, width, height)
         screen.save("temp_file_name.png")
-        self._SIGNAL.emit()
+        self._SIGNAL_CANCEL.emit()
+        self._SIGNAL_SUCCESS.emit()
 
     def close_window(self):
         self.close()
