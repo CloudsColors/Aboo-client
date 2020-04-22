@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QDesktopWidget
 from PyQt5.QtGui import QIcon, QPixmap, QPalette, QIcon
 from keylistener import KeyListener
 from canvaswindow import CanvasWindow
+from datetime import datetime
 
 class Window(QMainWindow):
 
@@ -33,6 +34,8 @@ class Window(QMainWindow):
         self.dialogs.clear()
 
     def on_hotkey_create_canvas(self):
+        #Testing, remove later.
+        self.create_new_upload_bubble("https://www.aboo.se/")
         #Clear any windows that already are open (to prevent several layers of windows)
         self.on_close_canvases()
         #Read in nr of monitors the user has
@@ -61,16 +64,21 @@ class Window(QMainWindow):
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.height)
         self.setFixedSize(self.width, self.height)
-        #Testing, remove later.
-        self.create_new_upload_bubble()
         #Show the window
         self.show()
 
-    def create_new_upload_bubble(self):
+    def create_new_upload_bubble(self, url):
+        if(len(self.uploadBubbles) == 4):
+            self.uploadBubbles.pop(0)
+            for i in range(0, len(self.uploadBubbles)):
+                self.uploadBubbles[i].move(15,215+(i*75))
+        timeNow = datetime.now()
+        time = timeNow.strftime("%Y-%m-%d %H:%M:%S")
         uploadText = QLabel(self)
-        uploadText.setText(f"<h4> Completed upload: </h4><p>https://www.aboo.se/</p>")
+        uploadText.setText(f"<h4> Uploaded {time} </h4><p>{url}</p>")
         uploadText.setGeometry(15, 215 + (len(self.uploadBubbles * 75)), 390, 60)
-        uploadText.setStyleSheet("background-color: #81B1D5; border: 1px solid black; border-radius: 5px")
+        uploadText.setStyleSheet("background-color: white; border: 1px solid black; border-radius: 5px") #bg color #81B1D5
+        uploadText.show()
         self.uploadBubbles.append(uploadText)
 
     #todo: import webbrowser
