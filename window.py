@@ -1,15 +1,18 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QDesktopWidget, QAction, QSystemTrayIcon, qApp, QMenu
-from PyQt5.QtCore import QEvent, Qt
-from PyQt5.QtGui import QIcon, QPixmap, QPalette
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QDesktopWidget, QSystemTrayIcon, qApp
+from PyQt5.QtGui import QIcon, QPixmap
+
 from keylistener import KeyListener
 from canvaswindow import CanvasWindow
 from uploader import Uploader
 from datetime import datetime
 from trayicon import TrayIcon
+from uploadbubble import UploadBubble
 
 import webbrowser
 
 class Window(QMainWindow):
+
+    _SHOW_TRAY_INFO_MSG_ONCE = True
 
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
@@ -69,12 +72,15 @@ class Window(QMainWindow):
         webbrowser.open(res[1])
 
     def closeEvent(self, event):
+        if(self._SHOW_TRAY_INFO_MSG_ONCE == False):
+            return
         self.trayIcon.showMessage(
             "Aboo-client",
             "Application was minimized to tray and is still running, left click and chose exit to close the application!",
             QSystemTrayIcon.Information,
-            1000
+            2000
         )
+        self._SHOW_TRAY_INFO_MSG_ONCE = False
 
     ''' --- GUI and window properties --- '''
 
@@ -90,7 +96,7 @@ class Window(QMainWindow):
         #Window settings
         qApp.setQuitOnLastWindowClosed(False) # Need this to not quit when canvasWindow is closed
         self.setStyleSheet("background-color: #A0D2E7;")
-        self.setWindowIcon(QIcon("statics/icon-medium.png"))
+        self.setWindowIcon(QIcon("statics/icon-large.png"))
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.height)
         self.setFixedSize(self.width, self.height)
@@ -106,14 +112,6 @@ class Window(QMainWindow):
             self.uploadBubbles.pop(0)
             for i in range(0, len(self.uploadBubbles)):
                 self.uploadBubbles[i].move(15,215+(i*75))
-        timeNow = datetime.now()
-        time = timeNow.strftime("%Y-%m-%d %H:%M:%S")
-        uploadText = QLabel(self)
-        if(success):
-            uploadText.setText(f"<h4> Uploaded {time} </h4><p>{url}</p>")
-        else:
-            uploadText.setText(f"<h4> Woops, upload failed!</h4><p>{url}</p>")
-        uploadText.setGeometry(15, 215 + (len(self.uploadBubbles * 75)), 390, 60)
-        uploadText.setStyleSheet("background-color: white; border: 1px solid black; border-radius: 5px") #bg color #81B1D5
-        uploadText.show()
-        self.uploadBubbles.append(uploadText)
+        uploadBubble = UploadBubble(success, len(self.uploadBubbles), url, self)
+        uploadBubble.show()
+        self.uploadBubbles.append(uploadBubble)

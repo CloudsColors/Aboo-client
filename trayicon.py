@@ -8,7 +8,7 @@ class TrayIcon(QSystemTrayIcon):
         self.init_tray_icon()
 
     def init_tray_icon(self):
-        self.setIcon(QIcon("statics/icon-small"))
+        self.setIcon(QIcon("statics/icon-large"))
         showAction = QAction("Show Aboo", self)
         quitAction = QAction("Exit", self)
         showAction.triggered.connect(self.show)
