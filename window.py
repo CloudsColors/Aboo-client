@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QDesktopWidget, QSystemTrayIcon, qApp
+from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QDesktopWidget, QPushButton, QSystemTrayIcon, qApp
 from PyQt5.QtGui import QIcon, QPixmap
 
 from keylistener import KeyListener
@@ -13,6 +13,7 @@ import webbrowser
 class Window(QMainWindow):
 
     _SHOW_TRAY_INFO_MSG_ONCE = True
+    _APP_VERSION = "0.9:2020-04-23"
 
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
@@ -86,19 +87,30 @@ class Window(QMainWindow):
 
     def init_window(self):
         #Background image
-        self.background = QLabel(self)
-        pixmap = QPixmap('statics/background.png')
-        self.background.setPixmap(pixmap)
-        self.background.resize(800,800)
-        self.background.setGeometry(0,-50,800,800)
+        self.label = QLabel(self)
+        self.label.setGeometry(0, 200, 800, 550)
+        self.label.setStyleSheet("background-color: #DFFFFF; border-bottom: 1px solid black")
         #Logo
         self.logo = QLabel(self)
         pixmap = QPixmap('statics/logo.png')
         self.logo.setPixmap(pixmap)
-        self.logo.setGeometry(0,0,800,200)
-        self.logo.setStyleSheet("background-color: #81B1D5")
+        self.logo.setGeometry(0, 0, 800, 200)
+        self.logo.setStyleSheet("background-color: #81B1D5; border-bottom: 1px solid black")
+        # Version label
+        self.versionLabel = QLabel(self)
+        self.versionLabel.setText("Version: "+self._APP_VERSION)
+        self.versionLabel.setStyleSheet("color: black")
+        self.versionLabel.setGeometry(650, 763, 200, 25)
         #Canvas windows list
         self.dialogs = list()
+        #Settings button
+        self.settingsButton = QPushButton("Settings", self)
+        self.settingsButton.setGeometry(20, 763, 80, 25)
+        self.settingsButton.setStyleSheet("color: black; background-color: white")
+        #Exit button
+        self.exitButton =QPushButton("Exit application", self)
+        self.exitButton.setGeometry(120, 763, 80, 25)
+        self.exitButton.setStyleSheet("color: black; background-color: white")
         #Window settings
         qApp.setQuitOnLastWindowClosed(False) # Need this to not quit when canvasWindow is closed
         self.setStyleSheet("background-color: #81B1D5;")

@@ -21,5 +21,5 @@ class UploadBubble(QLabel):
             self.setText(f"<h4> Uploaded {time} </h4><p>{self.url}</p>")
         else:
             self.setText(f"<h4> Woops, upload failed!</h4><p>{self.url}</p>")
-        self.setStyleSheet("background-color: rgba(227,242,248,85%); border: 1px solid #0F084B; border-radius: 5px;")
+        self.setStyleSheet("background-color: rgba(255,255,255,85%); border: 1px solid #0F084B; border-radius: 5px;")
         self.setGeometry(15, 215 + (self.nrOfBubbles * (self._HEIGHT+10)), self._WIDTH, self._HEIGHT)
