@@ -85,17 +85,23 @@ class Window(QMainWindow):
     ''' --- GUI and window properties --- '''
 
     def init_window(self):
+        #Background image
+        self.background = QLabel(self)
+        pixmap = QPixmap('statics/background.png')
+        self.background.setPixmap(pixmap)
+        self.background.resize(800,800)
+        self.background.setGeometry(0,-50,800,800)
         #Logo
         self.logo = QLabel(self)
         pixmap = QPixmap('statics/logo.png')
         self.logo.setPixmap(pixmap)
         self.logo.setGeometry(0,0,800,200)
-        self.logo.setStyleSheet("background-color: #3D60A7")
+        self.logo.setStyleSheet("background-color: #81B1D5")
         #Canvas windows list
         self.dialogs = list()
         #Window settings
         qApp.setQuitOnLastWindowClosed(False) # Need this to not quit when canvasWindow is closed
-        self.setStyleSheet("background-color: #A0D2E7;")
+        self.setStyleSheet("background-color: #81B1D5;")
         self.setWindowIcon(QIcon("statics/icon-large.png"))
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.height)

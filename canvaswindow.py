@@ -59,7 +59,7 @@ class CanvasWindow(QMainWindow):
         self.close()
 
     def init_window(self):
-        self.setWindowOpacity(0.1)
+        self.setWindowOpacity(0.2)
         #Remove titlebar and make window stay on top
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
 
