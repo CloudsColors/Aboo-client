@@ -107,10 +107,6 @@ class Window(QMainWindow):
         self.settingsButton = QPushButton("Settings", self)
         self.settingsButton.setGeometry(20, 763, 80, 25)
         self.settingsButton.setStyleSheet("color: black; background-color: white")
-        #Exit button
-        self.exitButton =QPushButton("Exit application", self)
-        self.exitButton.setGeometry(120, 763, 80, 25)
-        self.exitButton.setStyleSheet("color: black; background-color: white")
         #Window settings
         qApp.setQuitOnLastWindowClosed(False) # Need this to not quit when canvasWindow is closed
         self.setStyleSheet("background-color: #81B1D5;")
