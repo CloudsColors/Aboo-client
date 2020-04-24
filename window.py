@@ -69,8 +69,8 @@ class Window(QMainWindow):
         if(res[0] == False):
             self.display_new_upload_bubble(False)
             return
-        self.display_new_upload_bubble(True, res[1])
         webbrowser.open(res[1])
+        self.display_new_upload_bubble(True, res[1])
 
     def closeEvent(self, event):
         if(self._SHOW_TRAY_INFO_MSG_ONCE == False):
