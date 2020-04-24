@@ -10,6 +10,8 @@ class UploadBubble(QLabel):
     _WIDTH = 390
     _HEIGHT = 100
     _LEFT_CLICK = 1
+    _PADDING = 15
+    _UPLOADED = False
 
     def __init__(self, success, nrOfBubbles, url, parent=None):
         super(UploadBubble, self).__init__(parent)
@@ -25,13 +27,15 @@ class UploadBubble(QLabel):
         time = timeNow.strftime("%Y-%m-%d %H:%M:%S")
         if(self.success):
             self.setText(f"<h4> Uploaded {time} </h4><p>{self.url}</p>")
+            self._UPLOADED = True
         else:
             self.setText(f"<h4> Woops, upload failed!</h4><p>{self.url}</p>")
+            self._UPLOADED = False
         self.setStyleSheet("background-color: rgba(255,255,255,85%); border: 1px solid #0F084B; border-radius: 5px;")
-        self.setGeometry(15, 215 + (self.nrOfBubbles * (self._HEIGHT+10)), self._WIDTH, self._HEIGHT)
+        self.setGeometry(15, 215 + (self.nrOfBubbles * (self._HEIGHT+self._PADDING)), self._WIDTH, self._HEIGHT)
     
     def on_label_click(self, e):
-        if(e.button() == self._LEFT_CLICK):
+        if(e.button() == self._LEFT_CLICK and self._UPLOADED):
             webbrowser.open(self.url)
 
     def display_preview_image(self):

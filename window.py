@@ -125,7 +125,7 @@ class Window(QMainWindow):
         if(len(self.uploadBubbles) == 4):
             self.uploadBubbles.pop(0)
             for i in range(0, len(self.uploadBubbles)):
-                self.uploadBubbles[i].move(15,215+(i*75))
+                self.uploadBubbles[i].move(15,215+(i*115))
         uploadBubble = UploadBubble(success, len(self.uploadBubbles), url, self)
         uploadBubble.show()
         self.uploadBubbles.append(uploadBubble)

@@ -14,7 +14,10 @@ class Uploader:
         except:
             return (False, "Can not find a file with the filename: "+filename, None)
         #We dont need any header information for this call
-        response = requests.post(self._API_HOST, files=files)
+        try:
+            response = requests.post(self._API_HOST, files=files)
+        except:
+            return (False, "Could not establish connection with the API", None)
         if(not response.status_code == 201):
             return (False, "Something went wrong with the POST request", None)
         readResponse = json.loads(response.text)
