@@ -69,8 +69,8 @@ class Window(QMainWindow):
         if(res[0] == False):
             self.display_new_upload_bubble(False)
             return
-        self.display_new_upload_bubble(True, res[1])
         webbrowser.open(res[1])
+        self.display_new_upload_bubble(True, res[1])
 
     def closeEvent(self, event):
         if(self._SHOW_TRAY_INFO_MSG_ONCE == False):
@@ -107,10 +107,6 @@ class Window(QMainWindow):
         self.settingsButton = QPushButton("Settings", self)
         self.settingsButton.setGeometry(20, 763, 80, 25)
         self.settingsButton.setStyleSheet("color: black; background-color: white")
-        #Exit button
-        self.exitButton =QPushButton("Exit application", self)
-        self.exitButton.setGeometry(120, 763, 80, 25)
-        self.exitButton.setStyleSheet("color: black; background-color: white")
         #Window settings
         qApp.setQuitOnLastWindowClosed(False) # Need this to not quit when canvasWindow is closed
         self.setStyleSheet("background-color: #81B1D5;")
@@ -129,7 +125,7 @@ class Window(QMainWindow):
         if(len(self.uploadBubbles) == 4):
             self.uploadBubbles.pop(0)
             for i in range(0, len(self.uploadBubbles)):
-                self.uploadBubbles[i].move(15,215+(i*75))
+                self.uploadBubbles[i].move(15,215+(i*115))
         uploadBubble = UploadBubble(success, len(self.uploadBubbles), url, self)
         uploadBubble.show()
         self.uploadBubbles.append(uploadBubble)
