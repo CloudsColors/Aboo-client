@@ -71,7 +71,10 @@ class Window(QMainWindow):
         if(res[0] == False):
             self.display_new_upload_bubble(False)
             return
-        webbrowser.open(res[1])
+        if(self.settings.settings["open_browser_after_upload"]):
+            webbrowser.open(res[1])
+        if(self.settings.settings["copy_to_clipboard_after_upload"]):
+            qApp.clipboard().setText(res[1])
         self.display_new_upload_bubble(True, res[1])
 
     def closeEvent(self, event):

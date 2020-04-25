@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, qApp
 from PyQt5.QtGui import QPixmap
 from PyQt5 import QtCore
 
@@ -15,6 +15,7 @@ class UploadBubble(QLabel):
 
     def __init__(self, success, nrOfBubbles, url, parent=None):
         super(UploadBubble, self).__init__(parent)
+        self.parent = parent
         self.success = success
         self.nrOfBubbles = nrOfBubbles
         self.url = url
