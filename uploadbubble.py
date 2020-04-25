@@ -29,10 +29,11 @@ class UploadBubble(QLabel):
         if(self.success):
             self.setText(f"<h4> Uploaded {time} </h4><p>{self.url}</p>")
             self._UPLOADED = True
+            self.setStyleSheet("background-color: rgba(255,255,255,85%); border: 1px solid #0F084B; border-radius: 5px;")
         else:
             self.setText(f"<h4> Woops, upload failed!</h4><p>{self.url}</p>")
             self._UPLOADED = False
-        self.setStyleSheet("background-color: rgba(255,255,255,85%); border: 1px solid #0F084B; border-radius: 5px;")
+            self.setStyleSheet("background-color: rgba(255,255,0,85%); border: 1px solid #0F084B; border-radius: 5px;")
         self.setGeometry(15, 215 + (self.nrOfBubbles * (self._HEIGHT+self._PADDING)), self._WIDTH, self._HEIGHT)
     
     def on_label_click(self, e):

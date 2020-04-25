@@ -16,7 +16,10 @@ class KeyListener(QtCore.QObject):
         self._SIGNAL.emit()
 
     def run(self):
-        self.listener = keyboard.GlobalHotKeys({
-            self._HOTKEY: self.on_press
-        })
-        self.listener.start()
+        try:
+            self.listener = keyboard.GlobalHotKeys({
+                self._HOTKEY: self.on_press
+            })
+            self.listener.start()
+        except:
+            print("hotkey format is wrong, please fix in your settings and restart the application")

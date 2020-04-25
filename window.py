@@ -18,7 +18,7 @@ class Window(QMainWindow):
 
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
-        self.settings = Settings()
+        self.settings = Settings(self)
         self.title = "Aboo-client"
         self.top = 100
         self.left = 100
@@ -110,7 +110,7 @@ class Window(QMainWindow):
         self.dialogs = list()
         #Settings button
         self.settingsButton = QPushButton("Settings", self)
-        self.settingsButton.clicked.connect(self.settings.show) 
+        self.settingsButton.clicked.connect(self.settings.show_settings)
         self.settingsButton.setGeometry(20, 763, 80, 25)
         self.settingsButton.setStyleSheet("color: black; background-color: white")
         #Window settings
