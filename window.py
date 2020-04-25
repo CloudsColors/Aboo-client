@@ -7,6 +7,7 @@ from uploader import Uploader
 from datetime import datetime
 from trayicon import TrayIcon
 from uploadbubble import UploadBubble
+from settings import Settings
 
 import webbrowser
 
@@ -17,6 +18,7 @@ class Window(QMainWindow):
 
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
+        self.settings = Settings()
         self.title = "Aboo-client"
         self.top = 100
         self.left = 100
@@ -29,7 +31,7 @@ class Window(QMainWindow):
     ''' --- Listeners --- '''
 
     def init_key_listener(self):
-        self.keyListener = KeyListener()
+        self.keyListener = KeyListener(self)
         self.keyListener.run()
         self.keyListener._SIGNAL.connect(self.on_hotkey_create_canvas)
 
@@ -105,6 +107,7 @@ class Window(QMainWindow):
         self.dialogs = list()
         #Settings button
         self.settingsButton = QPushButton("Settings", self)
+        self.settingsButton.clicked.connect(self.settings.show) 
         self.settingsButton.setGeometry(20, 763, 80, 25)
         self.settingsButton.setStyleSheet("color: black; background-color: white")
         #Window settings
@@ -123,7 +126,8 @@ class Window(QMainWindow):
 
     def display_new_upload_bubble(self, success, url="Failed to upload :("):
         if(len(self.uploadBubbles) == 4):
-            self.uploadBubbles.pop(0)
+            bubbleToRemove = self.uploadBubbles.pop(0)
+            bubbleToRemove.close()
             for i in range(0, len(self.uploadBubbles)):
                 self.uploadBubbles[i].move(15,215+(i*115))
         uploadBubble = UploadBubble(success, len(self.uploadBubbles), url, self)
