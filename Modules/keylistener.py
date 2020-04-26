@@ -6,11 +6,11 @@ class KeyListener(QtCore.QObject):
     _SIGNAL = QtCore.pyqtSignal()
     _HOTKEY = "<ctrl>+<alt>+s"
 
-    def __init__(self, parent=None):
+    def __init__(self, setSettings, _HOTKEY, parent=None):
         super().__init__()
         self.parent = parent
-        if(not self.parent == None and self.parent.settings._SETTINGS == True):
-            self._HOTKEY = self.parent.settings.settings["screenshot_hotkey"]
+        if(setSettings):
+            self._HOTKEY = _HOTKEY
 
     def on_press(self):
         self._SIGNAL.emit()
@@ -22,4 +22,4 @@ class KeyListener(QtCore.QObject):
             })
             self.listener.start()
         except:
-            print("hotkey format is wrong, please fix in your settings and restart the application")
+            pass

@@ -24,8 +24,3 @@ class Uploader:
         url = readResponse["data"]["file"]["url"]["minimal"]
         _id = readResponse["data"]["file"]["metadata"]["id"]
         return (True, url, _id)
-
-#For testing purposes
-if __name__ == "__main__":
-    uploader = Uploader()
-    print(uploader.upload_screenshot("temp_file_name.png"))

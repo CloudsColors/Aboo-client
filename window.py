@@ -1,14 +1,15 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QLabel, QDesktopWidget, QPushButton, QSystemTrayIcon, qApp
 from PyQt5.QtGui import QIcon, QPixmap
 
-from keylistener import KeyListener
-from canvaswindow import CanvasWindow
-from uploader import Uploader
-from datetime import datetime
-from trayicon import TrayIcon
-from uploadbubble import UploadBubble
-from settings import Settings
+from Modules.keylistener import KeyListener
+from Modules.uploader import Uploader
 
+from Components.canvaswindow import CanvasWindow
+from Components.trayicon import TrayIcon
+from Components.uploadbubble import UploadBubble
+from Components.settings import Settings
+
+from datetime import datetime
 import webbrowser
 
 class Window(QMainWindow):
@@ -31,7 +32,9 @@ class Window(QMainWindow):
     ''' --- Listeners --- '''
 
     def init_key_listener(self):
-        self.keyListener = KeyListener(self)
+        _SETTINGS_SET = self.settings._SETTINGS_SET
+        _HOTKEY = self.settings.settings["screenshot_hotkey"]
+        self.keyListener = KeyListener(_SETTINGS_SET, _HOTKEY, self)
         self.keyListener.run()
         self.keyListener._SIGNAL.connect(self.on_hotkey_create_canvas)
 

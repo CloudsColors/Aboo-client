@@ -1,11 +1,11 @@
 from PyQt5.QtWidgets import QLabel, QCheckBox, QLineEdit, QPushButton
 
-import json, traceback
+import json, traceback, os
 
 class Settings(QLabel):
 
-    _SETTINGS = False
-    
+    _SETTINGS_SET = False
+    _PATH_SETTINGS_FILE = os.path.dirname(__file__)+"/Settings/settings.json"
     
     def __init__(self, parent=None):
         super().__init__()
@@ -15,11 +15,12 @@ class Settings(QLabel):
 
     def read_settings(self):
         try:
-            with open("settings.json", "r") as f:
+            with open(self._PATH_SETTINGS_FILE, "r") as f:
                 self.settings = json.load(f)
-                self._SETTINGS = True
+                self._SETTINGS_SET = True
                 f.close()
         except:
+            # TODO: Make warningbubble
             self._SETTINGS = False
 
     def save_settings(self):
@@ -28,7 +29,7 @@ class Settings(QLabel):
         self.settings["system_tray_on_close"] = self.tray.isChecked()
         self.settings["screenshot_hotkey"] = self.hotkey.text()
         try:
-            with open("settings.json", "w") as f:
+            with open(self._PATH_SETTINGS_FILE, "w") as f:
                 f.write(json.dumps(self.settings))
                 f.close()
         except:
@@ -75,7 +76,3 @@ class Settings(QLabel):
         self.cancel_button = QPushButton("Cancel", self)
         self.cancel_button.clicked.connect(self.close)
         self.cancel_button.move(310,360)
-
-if __name__ == "__main__":
-    settings = Settings()
-    print(settings.settings["screenshot_hotkey"])
