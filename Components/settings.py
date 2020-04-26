@@ -1,11 +1,15 @@
 from PyQt5.QtWidgets import QLabel, QCheckBox, QLineEdit, QPushButton
+from PyQt5.QtCore import pyqtSignal
 
 import json, traceback, os
 
 class Settings(QLabel):
 
+    _SETTINGS = {"open_browser_after_upload": True, "copy_to_clipboard_after_upload": False, "system_tray_on_close": True, "screenshot_hotkey": "<ctrl>+<alt>+s"}
     _SETTINGS_SET = False
+    _SETTINGS_SAVED = False
     _PATH_SETTINGS_FILE = os.path.dirname(__file__)+"/Settings/settings.json"
+    _SIGNAL_WARNING = pyqtSignal(str)
     
     def __init__(self, parent=None):
         super().__init__()
@@ -16,24 +20,24 @@ class Settings(QLabel):
     def read_settings(self):
         try:
             with open(self._PATH_SETTINGS_FILE, "r") as f:
-                self.settings = json.load(f)
+                self._SETTINGS = json.load(f)
                 self._SETTINGS_SET = True
                 f.close()
         except:
-            # TODO: Make warningbubble
-            self._SETTINGS = False
+            self._SETTINGS_SET = False
 
     def save_settings(self):
-        self.settings["open_browser_after_upload"] = self.browser.isChecked()
-        self.settings["copy_to_clipboard_after_upload"] = self.clipboard.isChecked()
-        self.settings["system_tray_on_close"] = self.tray.isChecked()
-        self.settings["screenshot_hotkey"] = self.hotkey.text()
+        self._SETTINGS_SAVED = False
+        self._SETTINGS["open_browser_after_upload"] = self.browser.isChecked()
+        self._SETTINGS["copy_to_clipboard_after_upload"] = self.clipboard.isChecked()
+        self._SETTINGS["system_tray_on_close"] = self.tray.isChecked()
+        self._SETTINGS["screenshot_hotkey"] = self.hotkey.text()
         try:
-            with open(self._PATH_SETTINGS_FILE, "w") as f:
-                f.write(json.dumps(self.settings))
+            with open(self._PATH_SETTINGS_FILE, "r+") as f:
+                f.write(json.dumps(self._SETTINGS))
                 f.close()
         except:
-            self._SETTINGS = False
+            self._SIGNAL_WARNING.emit("Error: Something went wrong and settings was not saved. Most likely settings.json was not found at the proper directory.")
         self.close()
 
     def show_settings(self):
@@ -46,22 +50,22 @@ class Settings(QLabel):
         self.setWindowTitle("Aboo-client settings")
         #Checkbox browser
         self.browser = QCheckBox("Open browser after upload",self)
-        self.browser.setChecked(self.settings["open_browser_after_upload"])
+        self.browser.setChecked(self._SETTINGS["open_browser_after_upload"])
         self.browser.move(10,10)
         #Checkbox clipboard
         self.clipboard = QCheckBox("Copy to clipboard after upload",self)
-        self.clipboard.setChecked(self.settings["copy_to_clipboard_after_upload"])
+        self.clipboard.setChecked(self._SETTINGS["copy_to_clipboard_after_upload"])
         self.clipboard.move(10,30)
         #Checkbox tray
         self.tray = QCheckBox("System tray on close",self)
-        self.tray.setChecked(self.settings["system_tray_on_close"])
+        self.tray.setChecked(self._SETTINGS["system_tray_on_close"])
         self.tray.move(10,50)
         #input field label
         self.hotkey_label = QLabel("Shortcut for screenshot (needs restart after applying)", self)
         self.hotkey_label.move(10, 90)
         #Input field hotkey
         self.hotkey = QLineEdit(self)
-        self.hotkey.setText(self.settings["screenshot_hotkey"])
+        self.hotkey.setText(self._SETTINGS["screenshot_hotkey"])
         self.hotkey.move(10, 110)
         #Input field description
         label_text_desc = "The shortcut needs to follow the syntax (In any order): <ctrl> for CTRL, <shift> for SHIFT, <alt> for ALT etc. Use + to add more buttons between each button. Regular letters like 's' or 'a' is just by themselves without any brackets. No spaces between (It wont work then)"

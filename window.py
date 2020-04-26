@@ -7,6 +7,7 @@ from Modules.uploader import Uploader
 from Components.canvaswindow import CanvasWindow
 from Components.trayicon import TrayIcon
 from Components.uploadbubble import UploadBubble
+from Components.warningbubble import WarningBubble
 from Components.settings import Settings
 
 from datetime import datetime
@@ -15,17 +16,18 @@ import webbrowser
 class Window(QMainWindow):
 
     _SHOW_TRAY_INFO_MSG_ONCE = True
-    _APP_VERSION = "0.9:2020-04-23"
+    _APP_VERSION = "0.99:2020-04-26"
 
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
         self.settings = Settings(self)
+        self.settings._SIGNAL_WARNING.connect(lambda msg: self.on_settings_warning(msg))
         self.title = "Aboo-client"
         self.top = 100
         self.left = 100
         self.width = 800
         self.height = 800
-        self.uploadBubbles = list()
+        self.bubbles = list()
         self.init_window()
         self.init_key_listener()
 
@@ -33,10 +35,17 @@ class Window(QMainWindow):
 
     def init_key_listener(self):
         _SETTINGS_SET = self.settings._SETTINGS_SET
-        _HOTKEY = self.settings.settings["screenshot_hotkey"]
+        _HOTKEY = self.settings._SETTINGS["screenshot_hotkey"]
+
+        if(not _SETTINGS_SET):
+            self.display_new_warning_bubble("Error: settings was not read in properly. Standard settings is set, '<ctrl>+<alt>+s' for screenshotting.")
+
         self.keyListener = KeyListener(_SETTINGS_SET, _HOTKEY, self)
-        self.keyListener.run()
+        res = self.keyListener.run()
         self.keyListener._SIGNAL.connect(self.on_hotkey_create_canvas)
+        # If something went wrong initializing the keylistener
+        if(res[0] == False):
+            self.display_new_warning_bubble(res[1])
 
     def init_close_listener(self):
         for dialog in self.dialogs:
@@ -44,6 +53,9 @@ class Window(QMainWindow):
             dialog._SIGNAL_SUCCESS.connect(self.on_screenshot_success)
 
     ''' --- Events --- '''
+
+    def on_settings_warning(self, msg):
+        self.display_new_warning_bubble(msg)
 
     def on_close_canvases(self):
         for dialog in self.dialogs:
@@ -74,9 +86,9 @@ class Window(QMainWindow):
         if(res[0] == False):
             self.display_new_upload_bubble(False)
             return
-        if(self.settings.settings["open_browser_after_upload"]):
+        if(self.settings._SETTINGS["open_browser_after_upload"]):
             webbrowser.open(res[1])
-        if(self.settings.settings["copy_to_clipboard_after_upload"]):
+        if(self.settings._SETTINGS["copy_to_clipboard_after_upload"]):
             qApp.clipboard().setText(res[1])
         self.display_new_upload_bubble(True, res[1])
 
@@ -130,12 +142,24 @@ class Window(QMainWindow):
         #Show the window
         self.show()
 
+    ''' --- GUI Bubbles --- '''
+
     def display_new_upload_bubble(self, success, url="Failed to upload :("):
-        if(len(self.uploadBubbles) == 4):
-            bubbleToRemove = self.uploadBubbles.pop(0)
-            bubbleToRemove.close()
-            for i in range(0, len(self.uploadBubbles)):
-                self.uploadBubbles[i].move(15,215+(i*115))
-        uploadBubble = UploadBubble(success, len(self.uploadBubbles), url, self)
+        if(len(self.bubbles) == 4):
+            self.rearrange_bubbles()
+        uploadBubble = UploadBubble(success, len(self.bubbles), url, self)
         uploadBubble.show()
-        self.uploadBubbles.append(uploadBubble)
+        self.bubbles.append(uploadBubble)
+
+    def display_new_warning_bubble(self, msg):
+        if(len(self.bubbles) == 4):
+            self.rearrange_bubbles()
+        warningBubble = WarningBubble(len(self.bubbles), msg, self)
+        warningBubble.show()
+        self.bubbles.append(warningBubble)
+
+    def rearrange_bubbles(self):
+        bubbleToRemove = self.bubbles.pop(0)
+        bubbleToRemove.close()
+        for i in range(0, len(self.bubbles)):
+            self.bubbles[i].move(15,215+(i*115))

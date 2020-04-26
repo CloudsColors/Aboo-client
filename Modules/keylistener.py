@@ -1,9 +1,9 @@
 from pynput import keyboard
-from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSignal, QObject
 
-class KeyListener(QtCore.QObject):
+class KeyListener(QObject):
 
-    _SIGNAL = QtCore.pyqtSignal()
+    _SIGNAL = pyqtSignal()
     _HOTKEY = "<ctrl>+<alt>+s"
 
     def __init__(self, setSettings, _HOTKEY, parent=None):
@@ -21,5 +21,6 @@ class KeyListener(QtCore.QObject):
                 self._HOTKEY: self.on_press
             })
             self.listener.start()
+            return (True, "")
         except:
-            pass
+            return (False, "Error: Hotkey is formatted wrong from settings, please format it correct and restart the application for shortcut to work.")
