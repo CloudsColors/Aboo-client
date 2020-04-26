@@ -1,4 +1,4 @@
-## Depdencies
+## Dependencies
 - Python 3.8
 - Pipenv, version: 2018.11.26
 
