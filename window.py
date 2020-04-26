@@ -93,6 +93,9 @@ class Window(QMainWindow):
         self.display_new_upload_bubble(True, res[1])
 
     def closeEvent(self, event):
+        if(not self.settings._SETTINGS["system_tray_on_close"]):
+            qApp.quit()
+            return
         if(self._SHOW_TRAY_INFO_MSG_ONCE == False):
             return
         self.trayIcon.showMessage(
