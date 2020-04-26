@@ -7,7 +7,6 @@ class Settings(QLabel):
 
     _SETTINGS = {"open_browser_after_upload": True, "copy_to_clipboard_after_upload": False, "system_tray_on_close": True, "screenshot_hotkey": "<ctrl>+<alt>+s"}
     _SETTINGS_SET = False
-    _SETTINGS_SAVED = False
     _PATH_SETTINGS_FILE = os.path.dirname(__file__)+"/Settings/settings.json"
     _SIGNAL_WARNING = pyqtSignal(str)
     
@@ -27,13 +26,13 @@ class Settings(QLabel):
             self._SETTINGS_SET = False
 
     def save_settings(self):
-        self._SETTINGS_SAVED = False
         self._SETTINGS["open_browser_after_upload"] = self.browser.isChecked()
         self._SETTINGS["copy_to_clipboard_after_upload"] = self.clipboard.isChecked()
         self._SETTINGS["system_tray_on_close"] = self.tray.isChecked()
         self._SETTINGS["screenshot_hotkey"] = self.hotkey.text()
         try:
             with open(self._PATH_SETTINGS_FILE, "r+") as f:
+                f.truncate(0)
                 f.write(json.dumps(self._SETTINGS))
                 f.close()
         except:

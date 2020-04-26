@@ -11,10 +11,12 @@ from Components.warningbubble import WarningBubble
 from Components.settings import Settings
 
 from datetime import datetime
-import webbrowser
+import webbrowser, os
 
 class Window(QMainWindow):
 
+    _PATH_CURRENT = os.path.dirname(__file__)
+    _PATH_STATICS = os.path.join(_PATH_CURRENT, "Statics")
     _SHOW_TRAY_INFO_MSG_ONCE = True
     _APP_VERSION = "0.99:2020-04-26"
 
@@ -82,7 +84,7 @@ class Window(QMainWindow):
 
     def on_screenshot_success(self):
         uploader = Uploader()
-        res = uploader.upload_screenshot("temp_file_name.png")
+        res = uploader.upload_screenshot(self._PATH_CURRENT+"/temp_file_name.png")
         if(res[0] == False):
             self.display_new_upload_bubble(False)
             return
@@ -115,7 +117,7 @@ class Window(QMainWindow):
         self.label.setStyleSheet("background-color: #DFFFFF; border-bottom: 1px solid black")
         #Logo
         self.logo = QLabel(self)
-        pixmap = QPixmap('statics/logo.png')
+        pixmap = QPixmap(self._PATH_STATICS+'/logo.png')
         self.logo.setPixmap(pixmap)
         self.logo.setGeometry(0, 0, 800, 200)
         self.logo.setStyleSheet("background-color: #81B1D5; border-bottom: 1px solid black")
@@ -123,7 +125,7 @@ class Window(QMainWindow):
         self.versionLabel = QLabel(self)
         self.versionLabel.setText("Version: "+self._APP_VERSION)
         self.versionLabel.setStyleSheet("color: black")
-        self.versionLabel.setGeometry(650, 763, 200, 25)
+        self.versionLabel.setGeometry(630, 763, 200, 25)
         #Canvas windows list
         self.dialogs = list()
         #Settings button
@@ -134,7 +136,7 @@ class Window(QMainWindow):
         #Window settings
         qApp.setQuitOnLastWindowClosed(False) # Need this to not quit when canvasWindow is closed
         self.setStyleSheet("background-color: #81B1D5;")
-        self.setWindowIcon(QIcon("statics/icon-large.png"))
+        self.setWindowIcon(QIcon(self._PATH_STATICS+"/icon-large.png"))
         self.setWindowTitle(self.title)
         self.setGeometry(self.top, self.left, self.width, self.height)
         self.setFixedSize(self.width, self.height)

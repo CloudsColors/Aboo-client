@@ -1,3 +1,2 @@
 .vscode/
-*.png
-*.jpeg
+/temp_file_name.png
