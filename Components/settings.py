@@ -1,17 +1,17 @@
 from PyQt5.QtWidgets import QLabel, QCheckBox, QLineEdit, QPushButton
 from PyQt5.QtCore import pyqtSignal
 
-import json, traceback, os
+import json, traceback, os, sys
 
 class Settings(QLabel):
 
     _SETTINGS = {"open_browser_after_upload": True, "copy_to_clipboard_after_upload": False, "system_tray_on_close": True, "screenshot_hotkey": "<ctrl>+<alt>+s"}
     _SETTINGS_SET = False
-    _PATH_SETTINGS_FILE = os.path.dirname(__file__)+"/Settings/settings.json"
     _SIGNAL_WARNING = pyqtSignal(str)
     
-    def __init__(self, parent=None):
+    def __init__(self, path, parent=None):
         super().__init__()
+        self._PATH_SETTINGS_FILE = path
         self.parent = parent
         self.read_settings()
         self.init_gui()

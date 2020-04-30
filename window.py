@@ -11,18 +11,26 @@ from Components.warningbubble import WarningBubble
 from Components.settings import Settings
 
 from datetime import datetime
-import webbrowser, os
+import webbrowser, os, sys
 
 class Window(QMainWindow):
 
-    _PATH_CURRENT = os.path.dirname(__file__)
-    _PATH_STATICS = os.path.join(_PATH_CURRENT, "Statics")
     _SHOW_TRAY_INFO_MSG_ONCE = True
     _APP_VERSION = "0.99:2020-04-26"
 
+    def resource_path(self, relative_path):
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
+
     def __init__(self, parent=None):
+        self._PATH_CURRENT = self.resource_path(".")
+        self._PATH_STATICS = self.resource_path("Statics")
         super(Window, self).__init__(parent)
-        self.settings = Settings(self)
+        self.settings = Settings(self.resource_path("Settings/settings.json"), self)
         self.settings._SIGNAL_WARNING.connect(lambda msg: self.on_settings_warning(msg))
         self.title = "Aboo-client"
         self.top = 100
@@ -141,7 +149,7 @@ class Window(QMainWindow):
         self.setGeometry(self.top, self.left, self.width, self.height)
         self.setFixedSize(self.width, self.height)
         #Tray settings
-        self.trayIcon = TrayIcon()
+        self.trayIcon = TrayIcon(self.resource_path("Statics/icon-large.png"))
         self.trayIcon.activated.connect(self.on_tray_double_clicked)
         self.trayIcon.show()
         #Show the window

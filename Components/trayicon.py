@@ -5,14 +5,13 @@ import os
 
 class TrayIcon(QSystemTrayIcon):
 
-    _PATH_STATICS = os.path.join(os.path.dirname(__file__), os.pardir, "Statics")
-
-    def __init__(self):
+    def __init__(self, path):
         super().__init__()
+        self._PATH_STATICS = path
         self.init_tray_icon()
 
     def init_tray_icon(self):
-        self.setIcon(QIcon(self._PATH_STATICS+"/icon-large.png"))
+        self.setIcon(QIcon(self._PATH_STATICS))
         showAction = QAction("Show Aboo", self)
         quitAction = QAction("Exit", self)
         showAction.triggered.connect(self.show)

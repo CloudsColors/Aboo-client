@@ -9,6 +9,7 @@ verify_ssl = true
 pyqt5 = "*"
 pynput = "*"
 requests = "*"
+pyinstaller = "*"
 
 [requires]
 python_version = "3.8"
