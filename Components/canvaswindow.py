@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QPixmap
 from PyQt5 import QtCore, Qt
 
+import os
+
 class CanvasWindow(QMainWindow):
 
     _RIGHT_CLICK = 2
@@ -9,8 +11,9 @@ class CanvasWindow(QMainWindow):
     _SIGNAL_CANCEL = QtCore.pyqtSignal()
     _SIGNAL_SUCCESS = QtCore.pyqtSignal()
 
-    def __init__(self, xOffset, yOffset, parent=None):
+    def __init__(self, xOffset, yOffset, path, parent=None):
         super(CanvasWindow, self).__init__()
+        self._SAVE_PATH = path
         #Screen offset is used to calculate where the screenshot is taken when not on primary
         self.xOffset = xOffset
         self.yOffset = yOffset
@@ -51,7 +54,12 @@ class CanvasWindow(QMainWindow):
         height = abs(self.mP.y() - self.mR.y())
         width = abs(self.mR.x() - self.mP.x())
         screen = QApplication.primaryScreen().grabWindow(0, upperLeft+self.xOffset, upperY+self.yOffset, width, height)
-        screen.save("temp_file_name.png")
+        try:
+            os.mkdir("temp")
+        except FileExistsError:
+            pass
+        screen.save(self._SAVE_PATH)
+        print(self._SAVE_PATH)
         self._SIGNAL_CANCEL.emit()
         self._SIGNAL_SUCCESS.emit()
 

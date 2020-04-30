@@ -15,6 +15,7 @@ import webbrowser, os, sys
 
 class Window(QMainWindow):
 
+    _SAVE_PATH_FILE = os.path.join(os.path.abspath("."), "temp", "temp_file.png")
     _SHOW_TRAY_INFO_MSG_ONCE = True
     _APP_VERSION = "0.99:2020-04-26"
 
@@ -80,7 +81,7 @@ class Window(QMainWindow):
         #Loop through and start the canvas on each of the monitor.
         for i in range(0, nrOfScreens):
             screenGeometry = QDesktopWidget().availableGeometry(i)
-            self.dialog = CanvasWindow(screenGeometry.x(), screenGeometry.y(), self)
+            self.dialog = CanvasWindow(screenGeometry.x(), screenGeometry.y(), self._SAVE_PATH_FILE, self)
             self.dialogs.append(self.dialog)
             self.dialog.showFullScreen()
             self.dialog.move(screenGeometry.x(), screenGeometry.y())
@@ -92,7 +93,7 @@ class Window(QMainWindow):
 
     def on_screenshot_success(self):
         uploader = Uploader()
-        res = uploader.upload_screenshot(self._PATH_CURRENT+"/temp_file_name.png")
+        res = uploader.upload_screenshot(self._SAVE_PATH_FILE)
         if(res[0] == False):
             self.display_new_upload_bubble(False)
             return
@@ -160,7 +161,7 @@ class Window(QMainWindow):
     def display_new_upload_bubble(self, success, url="Failed to upload :("):
         if(len(self.bubbles) == 4):
             self.rearrange_bubbles()
-        uploadBubble = UploadBubble(success, len(self.bubbles), url, self)
+        uploadBubble = UploadBubble(success, self._SAVE_PATH_FILE, len(self.bubbles), url, self)
         uploadBubble.show()
         self.bubbles.append(uploadBubble)
 

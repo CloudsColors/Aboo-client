@@ -1,6 +1,7 @@
 .vscode/
 /temp_file_name.png
-.dist/
-.build/
+dist/
+build/
 app.spec
 oconsole.spec
+temp/

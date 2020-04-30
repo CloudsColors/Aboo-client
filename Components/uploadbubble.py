@@ -13,8 +13,9 @@ class UploadBubble(QLabel):
     _PADDING = 15
     _UPLOADED = False
 
-    def __init__(self, success, nrOfBubbles, url, parent=None):
+    def __init__(self, success, path, nrOfBubbles, url, parent=None):
         super(UploadBubble, self).__init__(parent)
+        self._SAVE_PATH_FILE = path
         self.parent = parent
         self.success = success
         self.nrOfBubbles = nrOfBubbles
@@ -42,7 +43,7 @@ class UploadBubble(QLabel):
 
     def display_preview_image(self):
         self.preview = QLabel(self)
-        pixmap = QPixmap('temp_file_name.png')
+        pixmap = QPixmap(self._SAVE_PATH_FILE)
         adjusted_pixmap = pixmap.scaled(60, 60, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
         self.preview.setPixmap(adjusted_pixmap)
         self.preview.resize(60, 60)
