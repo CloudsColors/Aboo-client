@@ -4,3 +4,4 @@ dist/
 build/
 app.spec
 temp/
+/freeze_app.sh

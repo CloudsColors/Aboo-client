@@ -11,7 +11,7 @@ class Uploader:
         uploadName = datetime.now().strftime("%Y-%m-%d %H:%M:%S")+".png"
         try:
             files = {
-                "file": (uploadName, open(file, "rb"))
+                "file": (uploadName, file)
             }
         except:
             return (False, "Can not find a file with the filename: "+file, None)

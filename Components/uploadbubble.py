@@ -13,15 +13,14 @@ class UploadBubble(QLabel):
     _PADDING = 15
     _UPLOADED = False
 
-    def __init__(self, success, path, nrOfBubbles, url, parent=None):
+    def __init__(self, success, file, nrOfBubbles, url, parent=None):
         super(UploadBubble, self).__init__(parent)
-        self._SAVE_PATH_FILE = path
         self.parent = parent
         self.success = success
         self.nrOfBubbles = nrOfBubbles
         self.url = url
         self.init_upload_bubble()
-        self.display_preview_image()
+        self.display_preview_image(file)
         self.mouseReleaseEvent = self.on_label_click
 
     def init_upload_bubble(self):
@@ -41,9 +40,10 @@ class UploadBubble(QLabel):
         if(e.button() == self._LEFT_CLICK and self._UPLOADED):
             webbrowser.open(self.url)
 
-    def display_preview_image(self):
+    def display_preview_image(self, file):
         self.preview = QLabel(self)
-        pixmap = QPixmap(self._SAVE_PATH_FILE)
+        pixmap = QPixmap()
+        pixmap.loadFromData(file)
         adjusted_pixmap = pixmap.scaled(60, 60, QtCore.Qt.KeepAspectRatio, QtCore.Qt.FastTransformation)
         self.preview.setPixmap(adjusted_pixmap)
         self.preview.resize(60, 60)

@@ -62,7 +62,7 @@ class Window(QMainWindow):
     def init_close_listener(self):
         for dialog in self.dialogs:
             dialog._SIGNAL_CANCEL.connect(self.on_close_canvases)
-            dialog._SIGNAL_SUCCESS.connect(self.on_screenshot_success)
+            dialog._SIGNAL_SUCCESS.connect(lambda file: self.on_screenshot_success(file))
 
     ''' --- Events --- '''
 
@@ -92,17 +92,17 @@ class Window(QMainWindow):
         if(event == QSystemTrayIcon.DoubleClick):
             self.show()
 
-    def on_screenshot_success(self):
+    def on_screenshot_success(self, file):
         uploader = Uploader()
-        res = uploader.upload_screenshot(self._SAVE_PATH_FILE)
+        res = uploader.upload_screenshot(file)
         if(res[0] == False):
-            self.display_new_upload_bubble(False)
+            self.display_new_warning_bubble(res[1])
             return
         if(self.settings._SETTINGS["open_browser_after_upload"]):
             webbrowser.open(res[1])
         if(self.settings._SETTINGS["copy_to_clipboard_after_upload"]):
             qApp.clipboard().setText(res[1])
-        self.display_new_upload_bubble(True, res[1])
+        self.display_new_upload_bubble(True, file, res[1])
 
     def closeEvent(self, event):
         if(not self.settings._SETTINGS["system_tray_on_close"]):
@@ -159,10 +159,10 @@ class Window(QMainWindow):
 
     ''' --- GUI Bubbles --- '''
 
-    def display_new_upload_bubble(self, success, url="Failed to upload :("):
+    def display_new_upload_bubble(self, success, file, url="Failed to upload :("):
         if(len(self.bubbles) == 4):
             self.rearrange_bubbles()
-        uploadBubble = UploadBubble(success, self._SAVE_PATH_FILE, len(self.bubbles), url, self)
+        uploadBubble = UploadBubble(success, file, len(self.bubbles), url, self)
         uploadBubble.show()
         self.bubbles.append(uploadBubble)
 

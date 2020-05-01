@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from PyQt5.QtGui import QPainter, QBrush, QPen, QCursor, QPixmap
-from PyQt5 import QtCore, Qt
+from PyQt5.QtCore import pyqtSignal, Qt, QByteArray, QBuffer, QIODevice
 
 import os
 
@@ -8,8 +8,8 @@ class CanvasWindow(QMainWindow):
 
     _RIGHT_CLICK = 2
     _LEFT_CLICK = 1
-    _SIGNAL_CANCEL = QtCore.pyqtSignal()
-    _SIGNAL_SUCCESS = QtCore.pyqtSignal()
+    _SIGNAL_CANCEL = pyqtSignal()
+    _SIGNAL_SUCCESS = pyqtSignal(bytes)
 
     def __init__(self, xOffset, yOffset, path, parent=None):
         super(CanvasWindow, self).__init__()
@@ -24,7 +24,7 @@ class CanvasWindow(QMainWindow):
         self.init_window()
 
     def keyPressEvent(self, e):
-        if(e.key() == QtCore.Qt.Key_Escape):
+        if(e.key() == Qt.Key_Escape):
             self.close()
 
     def mouseMoveEvent(self, e):
@@ -54,13 +54,17 @@ class CanvasWindow(QMainWindow):
         height = abs(self.mP.y() - self.mR.y())
         width = abs(self.mR.x() - self.mP.x())
         screen = QApplication.primaryScreen().grabWindow(0, upperLeft+self.xOffset, upperY+self.yOffset, width, height)
-        try:
-            os.mkdir("temp")
-        except FileExistsError:
-            pass
-        screen.save(self._SAVE_PATH)
+        rawFile = QByteArray()
+        buff = QBuffer(rawFile)
+        buff.open(QIODevice.WriteOnly)
+        status = screen.save(buff, "PNG")
+        if(not status):
+            #todo add fail message
+            self._SIGNAL_CANCEL.emit()
+            return
+        file = rawFile.data()
         self._SIGNAL_CANCEL.emit()
-        self._SIGNAL_SUCCESS.emit()
+        self._SIGNAL_SUCCESS.emit(file)
 
     def close_window(self):
         self.close()
@@ -68,13 +72,13 @@ class CanvasWindow(QMainWindow):
     def init_window(self):
         self.setWindowOpacity(0.2)
         #Remove titlebar and make window stay on top
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
 
     def paintEvent(self, event):
         if(self.mN == None or self.mP == None):
             return
         self.painter = QPainter(self)
-        self.painter.setPen(QPen(QtCore.Qt.black, 2, QtCore.Qt.SolidLine))
+        self.painter.setPen(QPen(Qt.black, 2, Qt.SolidLine))
         self.painter.setOpacity(0.99)
         self.painter.drawRect(self.mP.x(), self.mP.y(), self.mN.x()-self.mP.x(), self.mN.y()-self.mP.y())
         self.painter.end()
