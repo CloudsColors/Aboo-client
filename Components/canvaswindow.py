@@ -59,7 +59,6 @@ class CanvasWindow(QMainWindow):
         except FileExistsError:
             pass
         screen.save(self._SAVE_PATH)
-        print(self._SAVE_PATH)
         self._SIGNAL_CANCEL.emit()
         self._SIGNAL_SUCCESS.emit()
 

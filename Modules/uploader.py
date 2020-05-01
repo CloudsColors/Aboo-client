@@ -7,14 +7,14 @@ class Uploader:
     def __init__(self):
         self._API_HOST = "https://api.aboo.se/file"
 
-    def upload_screenshot(self, filename):
+    def upload_screenshot(self, file):
         uploadName = datetime.now().strftime("%Y-%m-%d %H:%M:%S")+".png"
         try:
             files = {
-                "file": (uploadName, open(filename, "rb"))
+                "file": (uploadName, open(file, "rb"))
             }
         except:
-            return (False, "Can not find a file with the filename: "+filename, None)
+            return (False, "Can not find a file with the filename: "+file, None)
         #We dont need any header information for this call
         try:
             response = requests.post(self._API_HOST, files=files)

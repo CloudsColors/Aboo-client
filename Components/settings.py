@@ -23,7 +23,16 @@ class Settings(QLabel):
                 self._SETTINGS_SET = True
                 f.close()
         except:
-            self._SETTINGS_SET = False
+            self.create_settings()
+
+    def create_settings(self):
+        try:
+            os.mkdir("settings")
+        except FileExistsError:
+            pass
+        with open(self._PATH_SETTINGS_FILE, "w") as f:
+            f.write(json.dumps(self._SETTINGS))
+            f.close()
 
     def save_settings(self):
         self._SETTINGS["open_browser_after_upload"] = self.browser.isChecked()

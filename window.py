@@ -16,6 +16,7 @@ import webbrowser, os, sys
 class Window(QMainWindow):
 
     _SAVE_PATH_FILE = os.path.join(os.path.abspath("."), "temp", "temp_file.png")
+    _SAVE_SETTINGS_FILE = os.path.join(os.path.abspath("."), "settings", "settings.json")
     _SHOW_TRAY_INFO_MSG_ONCE = True
     _APP_VERSION = "0.99:2020-04-26"
 
@@ -31,7 +32,7 @@ class Window(QMainWindow):
         self._PATH_CURRENT = self.resource_path(".")
         self._PATH_STATICS = self.resource_path("Statics")
         super(Window, self).__init__(parent)
-        self.settings = Settings(self.resource_path("Settings/settings.json"), self)
+        self.settings = Settings(self.resource_path(self._SAVE_SETTINGS_FILE), self)
         self.settings._SIGNAL_WARNING.connect(lambda msg: self.on_settings_warning(msg))
         self.title = "Aboo-client"
         self.top = 100
