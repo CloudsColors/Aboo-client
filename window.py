@@ -46,13 +46,9 @@ class Window(QMainWindow):
     ''' --- Listeners --- '''
 
     def init_key_listener(self):
-        _SETTINGS_SET = self.settings._SETTINGS_SET
+        self.settings.is_settings_init()
         _HOTKEY = self.settings._SETTINGS["screenshot_hotkey"]
-
-        if(not _SETTINGS_SET):
-            self.display_new_warning_bubble("Error: settings was not read in properly. Standard settings is set, '<ctrl>+<alt>+s' for screenshotting.")
-
-        self.keyListener = KeyListener(_SETTINGS_SET, _HOTKEY, self)
+        self.keyListener = KeyListener(_HOTKEY, self)
         res = self.keyListener.run()
         self.keyListener._SIGNAL.connect(self.on_hotkey_create_canvas)
         # If something went wrong initializing the keylistener
@@ -102,6 +98,13 @@ class Window(QMainWindow):
             webbrowser.open(res[1])
         if(self.settings._SETTINGS["copy_to_clipboard_after_upload"]):
             qApp.clipboard().setText(res[1])
+        if(self.settings._SETTINGS["open_notification_on_upload"]):
+            self.trayIcon.showMessage(
+                "Aboo-client",
+                "Screenshot uploaded",
+                QSystemTrayIcon.Information,
+                2000
+            )
         self.display_new_upload_bubble(True, file, res[1])
 
     def closeEvent(self, event):

@@ -6,11 +6,10 @@ class KeyListener(QObject):
     _SIGNAL = pyqtSignal()
     _HOTKEY = "<ctrl>+<alt>+s"
 
-    def __init__(self, setSettings, _HOTKEY, parent=None):
+    def __init__(self, _HOTKEY, parent=None):
         super().__init__()
         self.parent = parent
-        if(setSettings):
-            self._HOTKEY = _HOTKEY
+        self._HOTKEY = _HOTKEY
 
     def on_press(self):
         self._SIGNAL.emit()
