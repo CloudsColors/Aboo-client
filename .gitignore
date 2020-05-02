@@ -2,6 +2,5 @@
 /temp_file_name.png
 dist/
 build/
-app.spec
 temp/
 /freeze_app.sh
